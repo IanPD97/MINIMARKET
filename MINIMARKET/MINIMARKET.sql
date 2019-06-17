@@ -1,0 +1,239 @@
+-- MySQL dump 10.13  Distrib 5.7.26, for Linux (x86_64)
+--
+-- Host: localhost    Database: MINIMARKET
+-- ------------------------------------------------------
+-- Server version	5.7.26-0ubuntu0.18.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `BOLETA`
+--
+
+DROP TABLE IF EXISTS `BOLETA`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `BOLETA` (
+  `NUM_B` int(11) NOT NULL AUTO_INCREMENT,
+  `MONTO` int(11) DEFAULT NULL,
+  `FECHA` date DEFAULT NULL,
+  PRIMARY KEY (`NUM_B`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `BOLETA`
+--
+
+LOCK TABLES `BOLETA` WRITE;
+/*!40000 ALTER TABLE `BOLETA` DISABLE KEYS */;
+/*!40000 ALTER TABLE `BOLETA` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `LOTE`
+--
+
+DROP TABLE IF EXISTS `LOTE`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LOTE` (
+  `ID_LOTE` int(11) NOT NULL AUTO_INCREMENT,
+  `FECHA_VENCIMIENTO` date DEFAULT NULL,
+  `STOCK` int(11) DEFAULT NULL,
+  `ID_PRODUCTO` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID_LOTE`),
+  KEY `ID_PRODUCTO` (`ID_PRODUCTO`),
+  CONSTRAINT `LOTE_ibfk_1` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `PRODUCTO` (`ID_PRODUCTO`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `LOTE`
+--
+
+LOCK TABLES `LOTE` WRITE;
+/*!40000 ALTER TABLE `LOTE` DISABLE KEYS */;
+/*!40000 ALTER TABLE `LOTE` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `OFRECEN`
+--
+
+DROP TABLE IF EXISTS `OFRECEN`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OFRECEN` (
+  `COD_OFRECEN` int(11) NOT NULL,
+  `ID_PRODUCTO` int(11) DEFAULT NULL,
+  `ID_PROVEEDOR` int(11) DEFAULT NULL,
+  `PRECIO_COMPRA` int(11) DEFAULT NULL,
+  PRIMARY KEY (`COD_OFRECEN`),
+  KEY `ID_PRODUCTO` (`ID_PRODUCTO`),
+  KEY `ID_PROVEEDOR` (`ID_PROVEEDOR`),
+  CONSTRAINT `OFRECEN_ibfk_1` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `PRODUCTO` (`ID_PRODUCTO`),
+  CONSTRAINT `OFRECEN_ibfk_2` FOREIGN KEY (`ID_PROVEEDOR`) REFERENCES `PROVEEDOR` (`ID_PROVEEDOR`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `OFRECEN`
+--
+
+LOCK TABLES `OFRECEN` WRITE;
+/*!40000 ALTER TABLE `OFRECEN` DISABLE KEYS */;
+/*!40000 ALTER TABLE `OFRECEN` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `PRODUCTO`
+--
+
+DROP TABLE IF EXISTS `PRODUCTO`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PRODUCTO` (
+  `ID_PRODUCTO` int(11) NOT NULL,
+  `NOMBRE_PROD` varchar(50) DEFAULT NULL,
+  `ID_T` int(11) DEFAULT NULL,
+  `CANTIDAD` varchar(50) DEFAULT NULL,
+  `DESCRIPCION_P` varchar(100) DEFAULT NULL,
+  `PRECIO` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID_PRODUCTO`),
+  KEY `ID_T` (`ID_T`),
+  CONSTRAINT `PRODUCTO_ibfk_1` FOREIGN KEY (`ID_T`) REFERENCES `TIPO` (`ID_TIPO`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `PRODUCTO`
+--
+
+LOCK TABLES `PRODUCTO` WRITE;
+/*!40000 ALTER TABLE `PRODUCTO` DISABLE KEYS */;
+INSERT INTO `PRODUCTO` VALUES (0,'PRODUCTOM',1,'2L','PRODUCTO PRUEBA',3000),(1,'PRODUCTO1',1,'3L','Producto',200),(2,'A',1,'3','A',2),(10,'A',1,'NN','P',2222),(11,'11',1,'11','11',11),(33,'A',1,'A','D',3),(60,'2',1,'2','j',9),(999,'999',1,'999','999',999);
+/*!40000 ALTER TABLE `PRODUCTO` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `PROVEEDOR`
+--
+
+DROP TABLE IF EXISTS `PROVEEDOR`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PROVEEDOR` (
+  `ID_PROVEEDOR` int(11) NOT NULL AUTO_INCREMENT,
+  `NOMBRE_PR` varchar(50) DEFAULT NULL,
+  `TELEFONO` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID_PROVEEDOR`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `PROVEEDOR`
+--
+
+LOCK TABLES `PROVEEDOR` WRITE;
+/*!40000 ALTER TABLE `PROVEEDOR` DISABLE KEYS */;
+/*!40000 ALTER TABLE `PROVEEDOR` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `TIPO`
+--
+
+DROP TABLE IF EXISTS `TIPO`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TIPO` (
+  `ID_TIPO` int(11) NOT NULL,
+  `DESCRIPCION_T` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`ID_TIPO`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TIPO`
+--
+
+LOCK TABLES `TIPO` WRITE;
+/*!40000 ALTER TABLE `TIPO` DISABLE KEYS */;
+INSERT INTO `TIPO` VALUES (1,'Tipo_Test');
+/*!40000 ALTER TABLE `TIPO` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `TRABAJADOR`
+--
+
+DROP TABLE IF EXISTS `TRABAJADOR`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TRABAJADOR` (
+  `RUT` varchar(30) NOT NULL,
+  `NOMBRE` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`RUT`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TRABAJADOR`
+--
+
+LOCK TABLES `TRABAJADOR` WRITE;
+/*!40000 ALTER TABLE `TRABAJADOR` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TRABAJADOR` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `VENDEN`
+--
+
+DROP TABLE IF EXISTS `VENDEN`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `VENDEN` (
+  `COD_VENTA` int(11) NOT NULL,
+  `RUT_TRAB` varchar(30) DEFAULT NULL,
+  `NUM_BOLETA` int(11) DEFAULT NULL,
+  `ID_PRODUCTO` int(11) DEFAULT NULL,
+  PRIMARY KEY (`COD_VENTA`),
+  KEY `RUT_TRAB` (`RUT_TRAB`),
+  KEY `NUM_BOLETA` (`NUM_BOLETA`),
+  KEY `ID_PRODUCTO` (`ID_PRODUCTO`),
+  CONSTRAINT `VENDEN_ibfk_1` FOREIGN KEY (`RUT_TRAB`) REFERENCES `TRABAJADOR` (`RUT`),
+  CONSTRAINT `VENDEN_ibfk_2` FOREIGN KEY (`NUM_BOLETA`) REFERENCES `BOLETA` (`NUM_B`),
+  CONSTRAINT `VENDEN_ibfk_3` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `PRODUCTO` (`ID_PRODUCTO`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `VENDEN`
+--
+
+LOCK TABLES `VENDEN` WRITE;
+/*!40000 ALTER TABLE `VENDEN` DISABLE KEYS */;
+/*!40000 ALTER TABLE `VENDEN` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2019-06-17 18:12:28
