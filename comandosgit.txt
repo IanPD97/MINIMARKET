@@ -1,0 +1,38 @@
+ACTUALIZAR REPOSITORIO(DESCARGAR DE GITHUB)
+
+	abrir consola en carpeta del archivo
+
+	git init
+	git pull
+	
+ACTUALIZAR REPOSITORIO(SUBIR A GITHUB)
+
+    Abrir consola en carpeta del archivo
+    
+    git init
+    git add . (agregar todo de la carpeta)
+    git commit -m "Comentario-de-actualizacion"
+    git push
+
+CLONAR REPOSITORIO(DESCARGAR PROYECTO DE CERO)
+	Crear nueva carpeta
+	Abrir terminal en la carpeta
+	
+	git clone link-de-clonación
+
+VER VERSIONES O EDCIONES
+	
+	git log
+
+CREAR RAMA
+	
+	git branch nombre-rama       ///creación
+	git checkout -b nombre-rama  ///creación y posicionamiento
+	
+	CAMBIARSE DE RAMA
+	git checkout nombre-rama
+ELIMINAR RAMA
+	
+	git branch -D nombre-rama
+	
+
