@@ -105,7 +105,7 @@ DROP TABLE IF EXISTS `PRODUCTO`;
 CREATE TABLE `PRODUCTO` (
   `ID_PRODUCTO` int(11) NOT NULL,
   `NOMBRE_PROD` varchar(50) DEFAULT NULL,
-  `ID_T` int(11) DEFAULT NULL,
+  `ID_T` varchar(30) DEFAULT NULL,
   `CANTIDAD` varchar(50) DEFAULT NULL,
   `DESCRIPCION_P` varchar(100) DEFAULT NULL,
   `PRECIO` int(11) DEFAULT NULL,
@@ -157,7 +157,7 @@ DROP TABLE IF EXISTS `TIPO`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `TIPO` (
-  `ID_TIPO` int(11) NOT NULL,
+  `ID_TIPO` varchar(30) NOT NULL,
   `DESCRIPCION_T` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`ID_TIPO`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
