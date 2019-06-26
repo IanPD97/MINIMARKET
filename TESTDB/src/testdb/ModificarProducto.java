@@ -291,7 +291,7 @@ void mostrartabla(String valor)
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(Mod_Prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -316,7 +316,7 @@ void mostrartabla(String valor)
 
     private void ACTUALIZARMODIFICACIONActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ACTUALIZARMODIFICACIONActionPerformed
         if (CAMP1.getText()=="" || CAMP2.getText()=="" || Select_tipo.getSelectedIndex()==0 || CAMP4.getText()=="" || CAMP5.getText()=="" || CAMP6.getText()==""){
-            JOptionPane.showMessageDialog(null, "No se ha seleccionado el producto a modificar");}
+            JOptionPane.showMessageDialog(null, "No pueden haber campos vacíos");}
         else{
             try {
                 int fila = Ventana.Mostrar2.getSelectedRow();
