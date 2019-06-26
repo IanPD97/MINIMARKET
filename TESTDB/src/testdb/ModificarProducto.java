@@ -35,14 +35,7 @@ public class ModificarProducto extends javax.swing.JDialog {
         agregarItem();
         
     }
-    void agregarItem()
-    {
-        Select_tipo.addItem("FRUTAS");
-        Select_tipo.addItem("BEBIDAS");
-        Select_tipo.addItem("VERDURAS");
-        
-    }
-       void mostrartabla(String valor)
+void mostrartabla(String valor)
     {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("CODIGO");
@@ -50,19 +43,22 @@ public class ModificarProducto extends javax.swing.JDialog {
         modelo.addColumn("TIPO");
         modelo.addColumn("CONTENIDO");
         modelo.addColumn("DESCRIPCION");
-        modelo.addColumn("PRECIO UNITARIO");
+        modelo.addColumn("PRECIO VENTA");
+        modelo.addColumn("PROVEEDOR");
+        modelo.addColumn("TELEFONO");
+        modelo.addColumn("PRECIO COMPRA");
         Ventana.Mostrar2.setModel(modelo);
         
         String sql = "";
         if(valor.equals(""))
         {
-            sql = "SELECT * FROM PRODUCTO";
+            sql = "SELECT PRODUCTO.ID_PRODUCTO,NOMBRE_PROD,ID_T,CANTIDAD,DESCRIPCION_P,PRECIO,NOMBRE_PR,TELEFONO,PRECIO_COMPRA FROM PRODUCTO INNER JOIN OFRECEN ON PRODUCTO.ID_PRODUCTO=OFRECEN.ID_PRODUCTO INNER JOIN PROVEEDOR ON OFRECEN.ID_PROVEEDOR=PROVEEDOR.ID_PROVEEDOR ORDER BY PROVEEDOR.ID_PROVEEDOR";
         }
         else
         {
-            sql = "SELECT * FROM PRODUCTO WHERE "+atributo+"='"+valor+"'";
+            sql = "SELECT PRODUCTO.ID_PRODUCTO,NOMBRE_PROD,ID_T,CANTIDAD,DESCRIPCION_P,PRECIO,NOMBRE_PR,TELEFONO,PRECIO_COMPRA FROM PRODUCTO INNER JOIN OFRECEN ON PRODUCTO.ID_PRODUCTO=OFRECEN.ID_PRODUCTO INNER JOIN PROVEEDOR ON OFRECEN.ID_PROVEEDOR=PROVEEDOR.ID_PROVEEDOR WHERE "+atributo+"='"+valor+"' ORDER BY PROVEEDOR.ID_PROVEEDOR";
         }
-        String datos[] = new String [6];
+        String datos[] = new String [9];
         Statement st;
         try{
             st = cn.createStatement();
@@ -75,6 +71,9 @@ public class ModificarProducto extends javax.swing.JDialog {
                 datos[3]=rs.getString(4);
                 datos[4]=rs.getString(5);
                 datos[5]=rs.getString(6);
+                datos[6]=rs.getString(7);
+                datos[7]=rs.getString(8);
+                datos[8]=rs.getString(9);
 
                 modelo.addRow(datos);
             }
@@ -93,7 +92,20 @@ public class ModificarProducto extends javax.swing.JDialog {
         CAMP4.setText("");
         CAMP5.setText("");
         CAMP6.setText("");
+        Select_proveedor.setSelectedItem("Seleccionar");
+        CAMP7.setText("");
     }
+    
+    void agregarItem()
+    {
+        Select_tipo.addItem("FRUTAS");
+        Select_tipo.addItem("BEBIDAS");
+        Select_tipo.addItem("VERDURAS");
+        Select_proveedor.addItem("PROVEEDOR1");
+        Select_proveedor.addItem("PROVEEDOR2");
+        Select_proveedor.addItem("PROVEEDOR3");
+    }
+
     
 
     /**
@@ -120,7 +132,9 @@ public class ModificarProducto extends javax.swing.JDialog {
         CAMP1 = new javax.swing.JTextField();
         ACTUALIZARMODIFICACION = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        Select_proveedor = new javax.swing.JComboBox<>();
+        CAMP7 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -155,7 +169,7 @@ public class ModificarProducto extends javax.swing.JDialog {
         jLabel6.setText("Descripcion");
 
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Precio");
+        jLabel11.setText("Precio Venta");
 
         Select_tipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
         Select_tipo.setToolTipText("");
@@ -181,7 +195,16 @@ public class ModificarProducto extends javax.swing.JDialog {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Proveedor");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+        Select_proveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar" }));
+
+        CAMP7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                CAMP7KeyTyped(evt);
+            }
+        });
+
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Precio Compra");
 
         javax.swing.GroupLayout Mod_ProdLayout = new javax.swing.GroupLayout(Mod_Prod);
         Mod_Prod.setLayout(Mod_ProdLayout);
@@ -200,18 +223,21 @@ public class ModificarProducto extends javax.swing.JDialog {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(jLabel11)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel1))
                 .addGap(40, 40, 40)
                 .addGroup(Mod_ProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(CAMP5, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Select_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(Mod_ProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(CAMP1, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(CAMP2, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(CAMP4, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(CAMP6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                        .addComponent(CAMP6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                    .addGroup(Mod_ProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(CAMP7, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(Select_proveedor, javax.swing.GroupLayout.Alignment.LEADING, 0, 120, Short.MAX_VALUE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         Mod_ProdLayout.setVerticalGroup(
             Mod_ProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -242,11 +268,15 @@ public class ModificarProducto extends javax.swing.JDialog {
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(Mod_ProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Select_proveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(Mod_ProdLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CAMP7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(ACTUALIZARMODIFICACION)
-                .addGap(17, 17, 17))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -294,6 +324,14 @@ public class ModificarProducto extends javax.swing.JDialog {
                 if (fila>=0){ 
                     PreparedStatement pps = cn.prepareStatement("UPDATE PRODUCTO SET ID_PRODUCTO='"+CAMP1.getText()+"',NOMBRE_PROD='"+CAMP2.getText()+"',ID_T='"+Select_tipo.getSelectedItem().toString()+"',CANTIDAD='"+CAMP4.getText()+"',DESCRIPCION_P='"+CAMP5.getText()+"',PRECIO='"+CAMP6.getText()+"' WHERE ID_PRODUCTO='"+Ventana.Mostrar2.getValueAt(fila, 0).toString()+"'");
                     pps.executeUpdate();
+                    if (Select_proveedor.getSelectedIndex()==0)
+                    {
+                        pps = cn.prepareStatement("UPDATE OFRECEN SET ID_PRODUCTO='"+CAMP1.getText()+"',ID_PROVEEDOR='"+4+"',PRECIO_COMPRA='"+CAMP7.getText()+"' WHERE ID_PRODUCTO='"+Ventana.Mostrar2.getValueAt(fila, 0).toString()+"'");
+                    }
+                    else{
+                    pps = cn.prepareStatement("UPDATE OFRECEN SET ID_PRODUCTO='"+CAMP1.getText()+"',ID_PROVEEDOR='"+Select_proveedor.getSelectedIndex()+"',PRECIO_COMPRA='"+CAMP7.getText()+"' WHERE ID_PRODUCTO='"+Ventana.Mostrar2.getValueAt(fila, 0).toString()+"'");
+                    }
+                    pps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Datos modificados ");
                     mostrartabla("");
                     this.setVisible(false);
@@ -308,6 +346,11 @@ public class ModificarProducto extends javax.swing.JDialog {
     private void CAMP6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CAMP6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_CAMP6ActionPerformed
+
+    private void CAMP7KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CAMP7KeyTyped
+        char c = evt.getKeyChar();
+        if (c<'0' || c>'9') evt.consume();
+    }//GEN-LAST:event_CAMP7KeyTyped
 
     /**
      * @param args the command line arguments
@@ -358,9 +401,11 @@ public class ModificarProducto extends javax.swing.JDialog {
     public static javax.swing.JTextField CAMP4;
     public static javax.swing.JTextField CAMP5;
     public static javax.swing.JTextField CAMP6;
+    public static javax.swing.JTextField CAMP7;
     private javax.swing.JPanel Mod_Prod;
+    public static javax.swing.JComboBox<String> Select_proveedor;
     public static javax.swing.JComboBox<String> Select_tipo;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
