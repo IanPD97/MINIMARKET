@@ -183,11 +183,19 @@ public class Ventana extends javax.swing.JFrame {
         Select_tipo.addItem("FRUTAS");
         Select_tipo.addItem("BEBIDAS");
         Select_tipo.addItem("VERDURAS");
+        Select_tipo.addItem("ABARROTES");
         Select_proveedor.addItem("PROVEEDOR1");
         Select_proveedor.addItem("PROVEEDOR2");
         Select_proveedor.addItem("PROVEEDOR3");
     }
 
+   /* void eliminarItem()
+    {
+        Select_tipo.addItem("FRUTAS");
+        Select_tipo.addItem("BEBIDAS");
+        Select_tipo.addItem("VERDURAS");
+    }*/
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
