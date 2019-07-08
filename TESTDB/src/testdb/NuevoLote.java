@@ -42,13 +42,7 @@ public class NuevoLote extends javax.swing.JDialog {
 
         
     }
-    void componentes()
-    {
-        int mes = CALENDARIO.getCalendar().get(Calendar.MONTH)+1;
-        print1.setText("'"+CALENDARIO.getCalendar().get(Calendar.DAY_OF_MONTH)+"'");
-        print2.setText("'"+mes+"'");
-        print3.setText("'"+CALENDARIO.getCalendar().get(Calendar.YEAR)+"'");
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
