@@ -101,6 +101,7 @@ void mostrartabla(String valor)
         Select_tipo.addItem("FRUTAS");
         Select_tipo.addItem("BEBIDAS");
         Select_tipo.addItem("VERDURAS");
+        Select_tipo.addItem("ABARROTES");
         Select_proveedor.addItem("PROVEEDOR1");
         Select_proveedor.addItem("PROVEEDOR2");
         Select_proveedor.addItem("PROVEEDOR3");
