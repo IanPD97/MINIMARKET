@@ -136,9 +136,19 @@ public class NuevoLote extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(51, 51, 51)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(59, 59, 59)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                    .addComponent(print2))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(Nombre)
@@ -150,22 +160,11 @@ public class NuevoLote extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(STOCK, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(NOMBREPRODUCTO, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
-                            .addComponent(CALENDARIO, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(88, Short.MAX_VALUE))
+                            .addComponent(CALENDARIO, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(Guardar)
-                        .addGap(162, 162, 162))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(59, 59, 59)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                    .addComponent(print2))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(88, 88, 88)
+                        .addComponent(Guardar)))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,8 +234,12 @@ public class NuevoLote extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_CALENDARIOAncestorAdded
 
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
+
     private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
-       
+
         int dia = CALENDARIO.getCalendar().get(Calendar.DAY_OF_MONTH);
         int mes = CALENDARIO.getCalendar().get(Calendar.MONTH)+1;
         int year = CALENDARIO.getCalendar().get(Calendar.YEAR);
@@ -246,7 +249,7 @@ public class NuevoLote extends javax.swing.JDialog {
             try {
                 int fila = Ventana.mostrarProd.getSelectedRow();
 
-                if (fila>=0){ 
+                if (fila>=0){
                     PreparedStatement pps = cn.prepareStatement("INSERT INTO LOTE (ID_PRODUCTO,STOCK,FECHA_VENCIMIENTO) VALUES('"+IDPRODUCTO.getText()+"','"+STOCK.getText()+"','"+year+"-"+mes+"-"+dia+"')");
                     pps.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Datos modificados ");
@@ -259,14 +262,16 @@ public class NuevoLote extends javax.swing.JDialog {
                 Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             }}
     }//GEN-LAST:event_GuardarActionPerformed
-
-    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordField1ActionPerformed
   /*   @estebancl7
  
     */  
     /*public boolean VerficiarUsr()*/
+    
+    void limpiar(){
+        STOCK.setText("");
+        print2.setText("");
+        jPasswordField1.setText("");
+    }
     
     void mostrartablaProd(String valor)
     {
