@@ -34,6 +34,7 @@ public class Ventana extends javax.swing.JFrame {
         mostrartabla("");
         agregarItem();
         mostrartablaProd("");
+        mostrarTablaStock("");
     }
     
     public int existeID(String ID_PRODUCTO) throws SQLException
@@ -74,7 +75,6 @@ public class Ventana extends javax.swing.JFrame {
             return 1;
         } 
     }
-    
     void mostrartabla(String valor)
     {
         DefaultTableModel modelo = new DefaultTableModel();
@@ -118,6 +118,47 @@ public class Ventana extends javax.swing.JFrame {
                 modelo.addRow(datos);
             }
             Mostrar2.setModel(modelo);
+            
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE,null,ex);
+        }
+    }
+    
+    void mostrarTablaStock(String valor)
+    {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("CODIGO");
+        modelo.addColumn("NOMBRE PRODUCTO");
+        modelo.addColumn("FECHA DE VENCIMIENTO");
+        modelo.addColumn("STOCK");
+
+        mostrarStock.setModel(modelo);
+        
+        String sql = "";
+        if(valor.equals(""))
+        {
+            sql = "SELECT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO";
+        }
+        else
+        {
+            sql = "SELECT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE "+atributo+"='"+valor+"' AND LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO";
+        }
+        String datos[] = new String [4];
+        Statement st;
+        try{
+            st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next())
+            {
+                datos[0]=rs.getString(1);
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3);
+                datos[3]=rs.getString(4);
+
+                modelo.addRow(datos);
+            }
+            mostrarStock.setModel(modelo);
         } catch (SQLException ex)
         {
             Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE,null,ex);
@@ -197,6 +238,7 @@ public class Ventana extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         Filtros = new javax.swing.ButtonGroup();
         FiltrosL = new javax.swing.ButtonGroup();
+        FiltrosS = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
@@ -239,6 +281,13 @@ public class Ventana extends javax.swing.JFrame {
         BCodigoL = new javax.swing.JRadioButton();
         BBuscarL = new javax.swing.JButton();
         NuevoLote = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        mostrarStock = new javax.swing.JTable();
+        CAMPBS = new javax.swing.JTextField();
+        BNombreP = new javax.swing.JRadioButton();
+        BCodigoP = new javax.swing.JRadioButton();
+        Buscar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -364,6 +413,11 @@ public class Ventana extends javax.swing.JFrame {
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel7.setForeground(new java.awt.Color(255, 255, 255));
 
+        CAMP6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CAMP6ActionPerformed(evt);
+            }
+        });
         CAMP6.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 CAMP6KeyTyped(evt);
@@ -569,7 +623,7 @@ public class Ventana extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(CAMPBL, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -594,13 +648,69 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(BCodigoL)
                     .addComponent(BBuscarL))
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(NuevoLote)
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("INGRESAR LOTES", jPanel4);
+
+        mostrarStock.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane4.setViewportView(mostrarStock);
+
+        BNombreP.setText("Nombre");
+
+        BCodigoP.setText("Codigo");
+
+        Buscar.setText("Buscar");
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(CAMPBS, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BNombreP)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BCodigoP)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Buscar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(CAMPBS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BNombreP)
+                    .addComponent(BCodigoP)
+                    .addComponent(Buscar))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(96, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("VER STOCK", jPanel5);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -776,6 +886,19 @@ public class Ventana extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_NuevoLoteActionPerformed
 
+    private void CAMP6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CAMP6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CAMP6ActionPerformed
+
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        FiltrosS.add(BNombreP);
+        FiltrosS.add(BCodigoP);
+        if(BCodigoP.isSelected()){atributo="LOTE.ID_PRODUCTO"; mostrarTablaStock(CAMPBS.getText());}
+        else if(BNombreP.isSelected()){atributo="PRODUCTO.NOMBRE_PROD"; mostrarTablaStock(CAMPBS.getText());}
+        else{JOptionPane.showMessageDialog(null, "No hay filtros de búsqueda seleccionados");
+        
+    }//GEN-LAST:event_BuscarActionPerformed
+    }
         
     /**
      * @param args the command line arguments
@@ -814,9 +937,12 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JButton BBuscar;
     private javax.swing.JButton BBuscarL;
     private javax.swing.JRadioButton BCodigoL;
+    private javax.swing.JRadioButton BCodigoP;
     private javax.swing.JRadioButton BNombre;
     private javax.swing.JRadioButton BNombreL;
+    private javax.swing.JRadioButton BNombreP;
     private javax.swing.JRadioButton BTipo;
+    private javax.swing.JButton Buscar;
     public static javax.swing.JTextField CAMP1;
     public static javax.swing.JTextField CAMP2;
     public static javax.swing.JTextField CAMP4;
@@ -825,10 +951,12 @@ public class Ventana extends javax.swing.JFrame {
     public static javax.swing.JTextField CAMP7;
     private javax.swing.JTextField CAMPB;
     private javax.swing.JTextField CAMPBL;
+    private javax.swing.JTextField CAMPBS;
     private javax.swing.ButtonGroup Filtros;
     private javax.swing.ButtonGroup FiltrosL;
+    private javax.swing.ButtonGroup FiltrosS;
     public static javax.swing.JButton LIMPIAR;
-    private javax.swing.JButton MODIFICAR;
+    public static javax.swing.JButton MODIFICAR;
     public static javax.swing.JTable Mostrar2;
     private javax.swing.JButton NuevoLote;
     public static javax.swing.JComboBox<String> Select_proveedor;
@@ -847,14 +975,17 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     public static javax.swing.JTable mostrarProd;
+    private javax.swing.JTable mostrarStock;
     // End of variables declaration//GEN-END:variables
 
 }

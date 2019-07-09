@@ -109,6 +109,9 @@ public class Login extends javax.swing.JFrame {
             Ventana.CAMP7.setEnabled(false);
             Ventana.Select_proveedor.setEditable(false); 
             Ventana.Select_proveedor.setEnabled(false);
+            Ventana.MODIFICAR.setEnabled(false);
+            Ventana.LIMPIAR.setEnabled(false);
+            Ventana.ACEPTAR1.setEnabled(false);
      }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
