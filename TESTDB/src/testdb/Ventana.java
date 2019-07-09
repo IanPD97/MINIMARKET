@@ -139,6 +139,7 @@ public class Ventana extends javax.swing.JFrame {
         if(valor.equals(""))
         {
             sql = "SELECT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO";
+     
         }
         else
         {
@@ -288,6 +289,7 @@ public class Ventana extends javax.swing.JFrame {
         BNombreP = new javax.swing.JRadioButton();
         BCodigoP = new javax.swing.JRadioButton();
         Buscar = new javax.swing.JButton();
+        actualizar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -410,7 +412,7 @@ public class Ventana extends javax.swing.JFrame {
         jTabbedPane1.addTab("VER/EDITAR PRODUCTOS", jPanel9);
 
         jPanel7.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel7.setForeground(new java.awt.Color(255, 255, 255));
 
         CAMP6.addActionListener(new java.awt.event.ActionListener() {
@@ -677,6 +679,13 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        actualizar.setText("Actualizar");
+        actualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -684,7 +693,6 @@ public class Ventana extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(CAMPBS, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -693,8 +701,14 @@ public class Ventana extends javax.swing.JFrame {
                         .addComponent(BCodigoP)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Buscar)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(427, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane4))
+                        .addGap(188, 188, 188))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -707,7 +721,9 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(Buscar))
                 .addGap(10, 10, 10)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("VER STOCK", jPanel5);
@@ -899,6 +915,11 @@ public class Ventana extends javax.swing.JFrame {
         
     }//GEN-LAST:event_BuscarActionPerformed
     }
+    private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+        mostrarTablaStock("");
+    }//GEN-LAST:event_actualizarActionPerformed
+   
+    
         
     /**
      * @param args the command line arguments
@@ -962,6 +983,7 @@ public class Ventana extends javax.swing.JFrame {
     public static javax.swing.JComboBox<String> Select_proveedor;
     public static javax.swing.JComboBox<String> Select_tipo;
     public static javax.swing.JLabel VER_RUT;
+    private javax.swing.JButton actualizar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
