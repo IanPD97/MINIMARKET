@@ -57,25 +57,25 @@ public class Login extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(135, 135, 135)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPass))
+                    .addComponent(txtPass)
+                    .addComponent(txtUsuario)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(158, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(57, 57, 57)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
+                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
                 .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -85,13 +85,38 @@ public class Login extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
      validarUsuario();
+     String validar="admin";
+     Ventana.VER_RUT.setText(txtUsuario.getText());
+     if(txtUsuario.getText().equals(validar))
+     {
+     
+     }
+     else
+     {
+            Ventana.CAMP1.setEditable(false); 
+            Ventana.CAMP1.setEnabled(false);
+            Ventana.CAMP2.setEditable(false); 
+            Ventana.CAMP2.setEnabled(false);
+            Ventana.Select_tipo.setEditable(false); 
+            Ventana.Select_tipo.setEnabled(false);
+            Ventana.CAMP4.setEditable(false); 
+            Ventana.CAMP4.setEnabled(false);
+            Ventana.CAMP5.setEditable(false); 
+            Ventana.CAMP5.setEnabled(false);
+            Ventana.CAMP6.setEditable(false); 
+            Ventana.CAMP6.setEnabled(false);
+            Ventana.CAMP7.setEditable(false); 
+            Ventana.CAMP7.setEnabled(false);
+            Ventana.Select_proveedor.setEditable(false); 
+            Ventana.Select_proveedor.setEnabled(false);
+     }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     public void validarUsuario(){
         int resultado = 0;
         String pass = String.valueOf(txtPass.getPassword());
         String usuario = txtUsuario.getText();
-        String sql ="select * from trabajador where RUT='"+usuario+"'and clave='"+pass+"' ";
+        String sql ="select * from TRABAJADOR where RUT='"+usuario+"'and clave='"+pass+"' ";
         
         try{
             Statement st = cn.createStatement();
@@ -101,6 +126,7 @@ public class Login extends javax.swing.JFrame {
                 resultado = 1;
                 if(resultado==1){
                     Ventana form = new Ventana();
+                    
                     form.setVisible(true);
                     this.dispose();
                 }
