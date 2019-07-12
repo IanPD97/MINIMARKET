@@ -11,12 +11,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.KeyEvent;
-import static testdb.ModificarProducto.CAMP1;
+
+import java.util.Date;
+
 
 /**
  *
@@ -27,6 +30,7 @@ public class Ventana extends javax.swing.JFrame {
     Conectar con = new Conectar();
     Connection cn = con.conexion();
     String atributo="ID_PRODUCTO";
+    String num = "NUM_B";
 
 
     public Ventana() {
@@ -35,6 +39,8 @@ public class Ventana extends javax.swing.JFrame {
         agregarItem();
         mostrartablaProd("");
         mostrarTablaStock("");
+        
+        
     }
     
     public int existeID(String ID_PRODUCTO) throws SQLException
@@ -138,12 +144,11 @@ public class Ventana extends javax.swing.JFrame {
         String sql = "";
         if(valor.equals(""))
         {
-            sql = "SELECT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO";
-     
+            sql = "SELECT DISTINCT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO AND STOCK>0";
         }
         else
         {
-            sql = "SELECT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE "+atributo+"='"+valor+"' AND LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO";
+            sql = "SELECT DISTINCT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE "+atributo+"='"+valor+"' AND LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO AND STOCK>0";
         }
         String datos[] = new String [4];
         Statement st;
@@ -225,6 +230,8 @@ public class Ventana extends javax.swing.JFrame {
         Select_tipo.addItem("BEBIDAS");
         Select_tipo.addItem("VERDURAS");
         Select_tipo.addItem("ABARROTES");
+        Select_tipo.addItem("LACTEOS");
+        Select_tipo.addItem("ACEITE");
         Select_proveedor.addItem("PROVEEDOR1");
         Select_proveedor.addItem("PROVEEDOR2");
         Select_proveedor.addItem("PROVEEDOR3");
@@ -245,6 +252,8 @@ public class Ventana extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         VER_RUT = new javax.swing.JLabel();
+        nuevaBoleta = new javax.swing.JButton();
+        verBoletas = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         ACTUALIZAR = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -282,6 +291,7 @@ public class Ventana extends javax.swing.JFrame {
         BCodigoL = new javax.swing.JRadioButton();
         BBuscarL = new javax.swing.JButton();
         NuevoLote = new javax.swing.JButton();
+        BActualizarL = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         mostrarStock = new javax.swing.JTable();
@@ -289,7 +299,7 @@ public class Ventana extends javax.swing.JFrame {
         BNombreP = new javax.swing.JRadioButton();
         BCodigoP = new javax.swing.JRadioButton();
         Buscar = new javax.swing.JButton();
-        actualizar = new javax.swing.JButton();
+        BActualizarS = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -310,16 +320,35 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel1.setText("Sesion iniciada como: ");
 
+        nuevaBoleta.setText("INGRESAR NUEVA BOLETA");
+        nuevaBoleta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nuevaBoletaActionPerformed(evt);
+            }
+        });
+
+        verBoletas.setText("VER BOLETAS ANTERIORES");
+        verBoletas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                verBoletasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(VER_RUT)
-                .addContainerGap(565, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nuevaBoleta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(VER_RUT)
+                        .addGap(0, 467, Short.MAX_VALUE))
+                    .addComponent(verBoletas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -328,7 +357,11 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(VER_RUT))
-                .addContainerGap(443, Short.MAX_VALUE))
+                .addGap(33, 33, 33)
+                .addComponent(nuevaBoleta, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(verBoletas, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(152, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("VENTAS", jPanel2);
@@ -359,6 +392,12 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        CAMPB.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                CAMPBKeyPressed(evt);
+            }
+        });
+
         BNombre.setText("Nombre");
 
         BTipo.setText("Tipo");
@@ -381,7 +420,7 @@ public class Ventana extends javax.swing.JFrame {
                         .addComponent(MODIFICAR)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(ACTUALIZAR))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(CAMPB, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -401,7 +440,7 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(BTipo)
                     .addComponent(BBuscar))
                 .addGap(4, 4, 4)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ACTUALIZAR)
@@ -412,7 +451,7 @@ public class Ventana extends javax.swing.JFrame {
         jTabbedPane1.addTab("VER/EDITAR PRODUCTOS", jPanel9);
 
         jPanel7.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nuevo Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel7.setForeground(new java.awt.Color(255, 255, 255));
 
         CAMP6.addActionListener(new java.awt.event.ActionListener() {
@@ -573,7 +612,7 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(LIMPIAR, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ACEPTAR1))
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -585,7 +624,7 @@ public class Ventana extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(ACEPTAR1))
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 180, Short.MAX_VALUE))
+                .addGap(0, 151, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("REGISTRAR PRODUCTOS", jPanel3);
@@ -618,6 +657,13 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        BActualizarL.setText("Actualizar");
+        BActualizarL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BActualizarLActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -625,7 +671,7 @@ public class Ventana extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(CAMPBL, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -636,7 +682,8 @@ public class Ventana extends javax.swing.JFrame {
                         .addComponent(BBuscarL)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(BActualizarL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(NuevoLote)))
                 .addContainerGap())
         );
@@ -652,8 +699,10 @@ public class Ventana extends javax.swing.JFrame {
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(NuevoLote)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NuevoLote)
+                    .addComponent(BActualizarL))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("INGRESAR LOTES", jPanel4);
@@ -679,10 +728,10 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
-        actualizar.setText("Actualizar");
-        actualizar.addActionListener(new java.awt.event.ActionListener() {
+        BActualizarS.setText("Actualizar");
+        BActualizarS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actualizarActionPerformed(evt);
+                BActualizarSActionPerformed(evt);
             }
         });
 
@@ -693,6 +742,7 @@ public class Ventana extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(CAMPBS, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -701,14 +751,11 @@ public class Ventana extends javax.swing.JFrame {
                         .addComponent(BCodigoP)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Buscar)
-                        .addContainerGap(427, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane4))
-                        .addGap(188, 188, 188))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(BActualizarS)))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -722,8 +769,8 @@ public class Ventana extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addComponent(BActualizarS)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("VER STOCK", jPanel5);
@@ -915,10 +962,66 @@ public class Ventana extends javax.swing.JFrame {
         
     }//GEN-LAST:event_BuscarActionPerformed
     }
-    private void actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarActionPerformed
+    private void CAMPBKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_CAMPBKeyPressed
+
+    }//GEN-LAST:event_CAMPBKeyPressed
+
+    private void nuevaBoletaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevaBoletaActionPerformed
+        NuevaBoleta NB = new NuevaBoleta();
+        NB.setVisible(true);
+        //NB.txtNumboleta.setEnabled(false);
+        NB.txtNumboleta.setEditable(false);
+        //NB.txtVendedor.setEnabled(false);
+        NB.txtVendedor.setEditable(false);
+        //NB.txtFecha.setEnabled(false);
+        NB.txtFecha.setEditable(false);
+        //NB.txtCodigo.setEnabled(false);
+        NB.txtCodigo.setEditable(false);
+        //NB.txtPrecio.setEnabled(false);
+        NB.txtPrecio.setEditable(false);
+        //NB.txtNombre.setEnabled(false);
+        NB.txtNombre.setEditable(false);
+        //NB.txtTotal.setEnabled(false);
+        NB.txtTotal.setEditable(false);
+        
+        NB.txtVendedor.setText(VER_RUT.getText());
+        Calendar cal = Calendar.getInstance();
+        String DATE_FORMAT_NOW = "dd-MM-yyyy HH:mm:ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+        String fechh= sdf.format(cal.getTime());
+        NB.txtFecha.setText(fechh);
+        String sql_1 = "SELECT NUM_B FROM BOLETA WHERE FECHA=NOW()";
+        String NUMM;
+        Statement stmt;
+        ResultSet rs;
+        try {
+            PreparedStatement pps = cn.prepareStatement("INSERT INTO BOLETA (FECHA) VALUES (NOW())");
+            pps.executeUpdate();
+            stmt = cn.createStatement();
+            rs = stmt.executeQuery(sql_1);
+            while (rs.next()) {                                
+            NUMM = rs.getString(1);        
+            NB.txtNumboleta.setText(NUMM);}
+        } catch (SQLException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+    }//GEN-LAST:event_nuevaBoletaActionPerformed
+
+
+        
+        
+    private void verBoletasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verBoletasActionPerformed
+        VerBoletas VB = new VerBoletas();
+        VB.setVisible(true);
+    }//GEN-LAST:event_verBoletasActionPerformed
+
+    private void BActualizarLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BActualizarLActionPerformed
+        mostrartablaProd("");
+    }//GEN-LAST:event_BActualizarLActionPerformed
+
+    private void BActualizarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BActualizarSActionPerformed
         mostrarTablaStock("");
-    }//GEN-LAST:event_actualizarActionPerformed
-   
+    }//GEN-LAST:event_BActualizarSActionPerformed
     
         
     /**
@@ -955,6 +1058,8 @@ public class Ventana extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton ACEPTAR1;
     private javax.swing.JButton ACTUALIZAR;
+    private javax.swing.JButton BActualizarL;
+    private javax.swing.JButton BActualizarS;
     private javax.swing.JButton BBuscar;
     private javax.swing.JButton BBuscarL;
     private javax.swing.JRadioButton BCodigoL;
@@ -979,11 +1084,10 @@ public class Ventana extends javax.swing.JFrame {
     public static javax.swing.JButton LIMPIAR;
     public static javax.swing.JButton MODIFICAR;
     public static javax.swing.JTable Mostrar2;
-    private javax.swing.JButton NuevoLote;
+    public static javax.swing.JButton NuevoLote;
     public static javax.swing.JComboBox<String> Select_proveedor;
     public static javax.swing.JComboBox<String> Select_tipo;
     public static javax.swing.JLabel VER_RUT;
-    private javax.swing.JButton actualizar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -1007,7 +1111,9 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     public static javax.swing.JTable mostrarProd;
-    private javax.swing.JTable mostrarStock;
+    public static javax.swing.JTable mostrarStock;
+    private javax.swing.JButton nuevaBoleta;
+    private javax.swing.JButton verBoletas;
     // End of variables declaration//GEN-END:variables
 
 }

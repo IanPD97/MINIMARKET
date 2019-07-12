@@ -79,6 +79,11 @@ public class NuevoLote extends javax.swing.JDialog {
                 STOCKActionPerformed(evt);
             }
         });
+        STOCK.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                STOCKKeyTyped(evt);
+            }
+        });
 
         NOMBREPRODUCTO.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,7 +198,25 @@ public class NuevoLote extends javax.swing.JDialog {
     private void CALENDARIOAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_CALENDARIOAncestorAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_CALENDARIOAncestorAdded
-
+    
+    public int existeFecha(String ID_PRODUCTO, String FECHA) throws SQLException
+    {
+        try{
+        PreparedStatement pps = cn.prepareStatement("SELECT COUNT(FECHA_VENCIMIENTO) FROM LOTE WHERE ID_PRODUCTO = "+ID_PRODUCTO+" AND FECHA_VENCIMIENTO = '"+FECHA+"'");
+        ResultSet rs = null;
+        rs = pps.executeQuery();
+        if(rs.next())
+        {
+            return rs.getInt(1);
+        }
+        
+        return 1;
+        } catch (SQLException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE,null,ex);
+            return 1;
+        } 
+    }
+        
     private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
 
         int dia = CALENDARIO.getCalendar().get(Calendar.DAY_OF_MONTH);
@@ -206,24 +229,81 @@ public class NuevoLote extends javax.swing.JDialog {
                 int fila = Ventana.mostrarProd.getSelectedRow();
 
                 if (fila>=0){
-                    PreparedStatement pps = cn.prepareStatement("INSERT INTO LOTE (ID_PRODUCTO,STOCK,FECHA_VENCIMIENTO) VALUES('"+IDPRODUCTO.getText()+"','"+STOCK.getText()+"','"+year+"-"+mes+"-"+dia+"')");
-                    pps.executeUpdate();
-                    JOptionPane.showMessageDialog(null, "Datos modificados ");
-                    mostrartablaProd("");
-                    this.setVisible(false);
-
+                    String fecha = ""+year+"-"+mes+"-"+dia+"";
+                    if (existeFecha(IDPRODUCTO.getText(),fecha)==0)
+                    {
+                        PreparedStatement pps = cn.prepareStatement("INSERT INTO LOTE (ID_PRODUCTO,STOCK,FECHA_VENCIMIENTO) VALUES('"+IDPRODUCTO.getText()+"','"+STOCK.getText()+"','"+year+"-"+mes+"-"+dia+"')");
+                        pps.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "Datos modificados ");
+                        mostrartablaProd("");
+                        mostrarTablaStock("");
+                        this.setVisible(false);
+                        
+                    }
+                    else
+                    {
+                        PreparedStatement pps = cn.prepareStatement("UPDATE LOTE SET STOCK=STOCK+'"+STOCK.getText()+"' WHERE FECHA_VENCIMIENTO='"+year+"-"+mes+"-"+dia+"' AND ID_PRODUCTO="+IDPRODUCTO.getText()+"");
+                        pps.executeUpdate();
+                        JOptionPane.showMessageDialog(null, "Datos fusionados ");
+                        mostrartablaProd("");
+                        mostrarTablaStock("");
+                        this.setVisible(false);                        
+                    }
                 }
 
             } catch (SQLException ex) {
                 Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
             }}
     }//GEN-LAST:event_GuardarActionPerformed
+
+    private void STOCKKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_STOCKKeyTyped
+        char c = evt.getKeyChar();
+        if (c<'0' || c>'9') evt.consume();
+    }//GEN-LAST:event_STOCKKeyTyped
   /*   @estebancl7
  
     */  
     /*public boolean VerficiarUsr()*/
     
+    void mostrarTablaStock(String valor)
+    {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("CODIGO");
+        modelo.addColumn("NOMBRE PRODUCTO");
+        modelo.addColumn("FECHA DE VENCIMIENTO");
+        modelo.addColumn("STOCK");
 
+        Ventana.mostrarStock.setModel(modelo);
+        
+        String sql = "";
+        if(valor.equals(""))
+        {
+            sql = "SELECT DISTINCT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO AND STOCK>0";
+        }
+        else
+        {
+            sql = "SELECT DISTINCT LOTE.ID_PRODUCTO,PRODUCTO.NOMBRE_PROD,LOTE.FECHA_VENCIMIENTO,LOTE.STOCK FROM LOTE INNER JOIN PRODUCTO WHERE "+atributo+"='"+valor+"' AND LOTE.ID_PRODUCTO=PRODUCTO.ID_PRODUCTO AND STOCK>0";
+        }
+        String datos[] = new String [4];
+        Statement st;
+        try{
+            st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next())
+            {
+                datos[0]=rs.getString(1);
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3);
+                datos[3]=rs.getString(4);
+
+                modelo.addRow(datos);
+            }
+            Ventana.mostrarStock.setModel(modelo);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE,null,ex);
+        }
+    }
     
     void mostrartablaProd(String valor)
     {

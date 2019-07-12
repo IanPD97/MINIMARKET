@@ -67,7 +67,7 @@ public class Login extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(28, 28, 28)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -75,9 +75,9 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addGap(18, 18, 18)
                 .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(55, 55, 55))
         );
 
         pack();
@@ -112,6 +112,7 @@ public class Login extends javax.swing.JFrame {
             Ventana.MODIFICAR.setEnabled(false);
             Ventana.LIMPIAR.setEnabled(false);
             Ventana.ACEPTAR1.setEnabled(false);
+            Ventana.NuevoLote.setEnabled(false);
      }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
@@ -132,6 +133,10 @@ public class Login extends javax.swing.JFrame {
                     
                     form.setVisible(true);
                     this.dispose();
+                    String eliminar_vencidos = "DELETE FROM LOTE WHERE LOTE.FECHA_VENCIMIENTO-CURDATE() <= 0 AND LOTE.ID_PRODUCTO>=0";
+                    PreparedStatement pps = cn.prepareStatement(eliminar_vencidos);
+                    pps.executeUpdate();
+                    
                 }
                 
             }else{
