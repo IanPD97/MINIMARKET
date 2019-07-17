@@ -1021,6 +1021,15 @@ public class Ventana extends javax.swing.JFrame {
 
     private void BActualizarSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BActualizarSActionPerformed
         mostrarTablaStock("");
+        String eliminar_vencidos = "DELETE FROM LOTE WHERE LOTE.FECHA_VENCIMIENTO-CURDATE() <= 0 AND LOTE.ID_PRODUCTO>=0";
+        PreparedStatement pps;
+        try {
+            pps = cn.prepareStatement(eliminar_vencidos);
+            pps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_BActualizarSActionPerformed
     
         
